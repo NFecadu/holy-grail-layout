@@ -2,187 +2,178 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Holy Grail Layout Practice with Positioning</title>
+  <title>Holy Grail Layout (Manual Positioning)</title>
   <style>
-    /* ─────────────────────────────────────────────────────────────────────────
-       HEADER
-       ───────────────────────────────────────────────────────────────────────── */
+    /*─────────────────────────────────────────────────────────────────────────
+      1) RESET & BASIC STYLING
+      ─────────────────────────────────────────────────────────────────────────*/
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #FFFFFF; /* white page background */
+    }
+
+    /*─────────────────────────────────────────────────────────────────────────
+      2) HEADER
+      ─────────────────────────────────────────────────────────────────────────*/
     header {
       width: 90%;
       height: 100px;
-      background-color: #20B2AA;      /* LightSeaGreen (Adobe Wheel) */
-      border: 3px solid #006400;       /* DarkGreen (Adobe Wheel) */
+      background-color: #20B2AA;  /* LightSeaGreen (Adobe Wheel) */
+      border: 3px solid #006400;   /* DarkGreen (Adobe Wheel) */
       padding: 10px;
-      margin: 25px;
-      /* No position property: defaults to position: static.
-         As static, any top/right/bottom/left offsets are ignored. */
+      margin: 25px auto 0 auto;    /* 25px top margin, centered horizontally */
+      position: static;            /* default; no top/left offsets apply */
     }
 
-    /* ─────────────────────────────────────────────────────────────────────────
-       NAVIGATION BAR
-       ───────────────────────────────────────────────────────────────────────── */
+    /*─────────────────────────────────────────────────────────────────────────
+      3) NAVIGATION BAR
+      ─────────────────────────────────────────────────────────────────────────*/
     nav {
-      position: fixed;                 /* Pinned relative to viewport (not in document flow) */
+      position: fixed;             /* removed from normal flow, pinned to viewport */
       width: 90%;
       height: 50px;
-      background-color: #9400D3;       /* DarkViolet (Adobe Wheel) */
-      top: 170px;                      /* 170px down from viewport top edge */
-      left: 35px;                      /* 35px in from viewport left edge */
-      /* Because it’s fixed, it stays in place even when scrolling. */
+      background-color: #9400D3;   /* DarkViolet (Adobe Wheel) */
+      /* Compute top so it sits just below the header: 
+         header’s top margin = 25px 
+         + header height = 100px 
+         + header’s top padding = 10px 
+         = 135px total from top of viewport */
+      top: 135px;
+      left: 5%;                    /* 5% from left edge of viewport (so nav lines up with header) */
       padding: 10px;
+      /* Because it’s fixed, it stays in place even when you scroll. */
     }
 
-    /* ─────────────────────────────────────────────────────────────────────────
-       ARTICLES CONTAINER
-       ───────────────────────────────────────────────────────────────────────── */
+    /*─────────────────────────────────────────────────────────────────────────
+      4) ARTICLES CONTAINER
+      ─────────────────────────────────────────────────────────────────────────*/
     .articles {
-      position: relative;              /* Creates a new containing block for absolutely‐positioned children */
-      left: 30px;                      /* Shifts container 30px right from its default static spot */
-      top: 45px;                       /* Shifts container 45px down from its default static spot */
+      position: relative;          /* stays in normal flow but becomes reference for any abs children */
       width: 65%;
-      /* Height is flexible to fit both article boxes */
-      /* Because it is relative, child elements with position:absolute
-         will use this container’s top‐left corner as (0,0). */
+      margin: 20px 0 0 5%;         /* 20px down from whatever is above, 5% from left edge */
+      /* Since it’s relative, its own top/left would shift this block—but here we use margin 
+         to simplify positioning. */
     }
 
-    /* ─────────────────────────────────────────────────────────────────────────
-       INDIVIDUAL ARTICLE BOXES
-       ───────────────────────────────────────────────────────────────────────── */
+    /*─────────────────────────────────────────────────────────────────────────
+      5) INDIVIDUAL ARTICLE BOXES
+      ─────────────────────────────────────────────────────────────────────────*/
     article {
-      width: 100%;                     /* Fill entire width of .articles container */
+      width: 100%;                 /* fill the entire width of .articles */
       height: 200px;
-      background-color: #BA55D3;       /* MediumOrchid (Adobe Wheel) */
-      border: 5px solid #808080;       /* Gray border for clarity */
-      position: relative;              /* Stays in flow but can be nudged */
-      top: 15px;                       /* Moves this article 15px down from its normal spot */
-      margin-bottom: 10px;             /* Space between stacked articles */
-      /* Because it’s relative, the top offset shifts it downwards without removing from flow. */
+      background-color: #BA55D3;   /* MediumOrchid (Adobe Wheel) */
+      border: 5px solid #808080;   /* Gray border for clarity */
+      position: relative;          /* stays in flow, but can shift with top/left if needed */
+      top: 15px;                   /* moves this article 15px down from its default spot */
+      margin-bottom: 20px;         /* 20px space between stacked articles */
+      /* Because it’s relative, the “top: 15px” moves it without removing it from the flow, 
+         so the next article still appears underneath. */
     }
 
-    /* ─────────────────────────────────────────────────────────────────────────
-       ASIDE (SIDEBAR)
-       ───────────────────────────────────────────────────────────────────────── */
+    /*─────────────────────────────────────────────────────────────────────────
+      6) ASIDE (SIDEBAR)
+      ─────────────────────────────────────────────────────────────────────────*/
     aside {
       width: 40%;
       height: 420px;
-      background-color: #BDB76B;       /* DarkKhaki (Adobe Wheel) */
-      position: absolute;              /* Removed from normal flow; positioned relative to nearest ancestor with position */
-      left: 50%;                       /* Sidebar’s left edge is 50% across the body’s width */
-      top: 235px;                      /* Sidebar is 235px down from the top of that reference (the <body> by default) */
-      /* By combining left:50% and width:40%, the sidebar’s final horizontal placement
-         ends up in the right‐hand column of a Holy Grail layout. */
+      background-color: #BDB76B;   /* DarkKhaki (Adobe Wheel) */
+      position: absolute;          /* removed from flow, positioned relative to nearest positioned ancestor */
+      /* No parent <div> is explicitly positioned, so it falls back to <body> as its container. */
+      /* We want the sidebar to sit in the right‐hand column, just beneath the nav. */
+      top: 135px;                  /* 135px down from top of page (same as nav and header calculation) */
+      right: 5%;                   /* 5% in from the right edge of the viewport (so it aligns with left 5% + width 65%) */
+      /* Because width is 40% and right is 5%, left edge ends up at 55% across the viewport 
+         (5% left margin + 65% for articles = 70%; 70% + 5% right margin = 75% total—but the key 
+         is that articles (65% width) start at 5% from the left, and aside (40% width) ends 5% from the right). */
     }
 
-    /* ─────────────────────────────────────────────────────────────────────────
-       FOOTER
-       ───────────────────────────────────────────────────────────────────────── */
+    /*─────────────────────────────────────────────────────────────────────────
+      7) FOOTER
+      ─────────────────────────────────────────────────────────────────────────*/
     footer {
       width: 100%;
       height: 50px;
-      background-color: #191970;       /* MidnightBlue (Adobe Wheel) */
-      position: fixed;                 /* Pinned to bottom of viewport */
-      bottom: 0px;                     /* Flush with bottom edge of viewport */
-      /* No top/right/left offsets needed: bottom: 0 is sufficient */
+      background-color: #191970;   /* MidnightBlue (Adobe Wheel) */
+      position: fixed;             /* pinned to viewport bottom */
+      bottom: 0;                   /* flush with bottom edge */
+      left: 0;                     /* flush with left edge */
       padding: 10px;
-    }
-
-    /* ─────────────────────────────────────────────────────────────────────────
-       OPTIONAL: MAKE IT RESPONSIVE (NOT REQUIRED BUT GOOD PRACTICE)
-       ───────────────────────────────────────────────────────────────────────── */
-    @media (max-width: 768px) {
-      /* Collapse into a single‐column layout on smaller screens */
-      body {
-        margin: 0;
-      }
-      .articles {
-        left: 0;
-        top: 0;
-        width: 100%;
-      }
-      aside {
-        position: relative;  /* Return to normal flow below articles on small screens */
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: auto;        /* Let it expand naturally */
-        margin-top: 20px;
-      }
-      nav {
-        left: 0;
-        top: 100px;          /* Move it up a bit so it doesn’t overlap header on small screens */
-      }
-      footer {
-        bottom: 0;           /* Remains pinned, but page will scroll if needed */
-      }
+      /* No top/right/left offsets needed; bottom: 0 alone pins it to the bottom. */
     }
   </style>
 </head>
 <body>
 
-  <!-- ─────────────────────────────────────────────────────────────────────────
-       HEADER SECTION
-       ───────────────────────────────────────────────────────────────────────── -->
+  <!--─────────────────────────────────────────────────────────────────────────
+    HEADER SECTION
+    ─────────────────────────────────────────────────────────────────────────-->
   <header>
     <p>
-      This header has <strong>position: static</strong> (the default). Because static elements follow normal document flow, no top/right/bottom/left offsets apply here. It is 90% wide so it doesn’t stretch to the very edges, and I chose <code>background-color: #20B2AA</code> (LightSeaGreen) with a <code>border: 3px solid #006400</code> (DarkGreen) from the Adobe Wheel to give a professional, harmonious look. This box sits at the top in the natural order.
+      This header has <strong>position: static</strong> (the default). Because static elements follow normal document flow, no <code>top</code>/<code>right</code>/<code>bottom</code>/<code>left</code> offsets apply. It is 90% wide (centered by <code>margin: 25px auto</code>) so it doesn’t stretch fully edge‐to‐edge. I chose <code>background-color: #20B2AA</code> (LightSeaGreen) with <code>border: 3px solid #006400</code> (DarkGreen) from the Adobe Wheel to give a professional, harmonious look. This block simply sits at the top in normal order.
     </p>
   </header>
 
-  <!-- ─────────────────────────────────────────────────────────────────────────
-       NAVIGATION BAR
-       ───────────────────────────────────────────────────────────────────────── -->
+  <!--─────────────────────────────────────────────────────────────────────────
+    NAVIGATION BAR
+    ─────────────────────────────────────────────────────────────────────────-->
   <nav>
     <p>
-      This nav bar uses <strong>position: fixed</strong>, which removes it from normal document flow and pins it relative to the viewport. By setting <code>top: 170px</code> and <code>left: 35px</code>, it ends up exactly 170 pixels down from the top edge of the browser and 35 pixels from the left edge. Because it’s fixed, scrolling does not move it. I selected <code>background-color: #9400D3</code> (DarkViolet) so it stands out clearly against the header’s LightSeaGreen and the white page background.
+      The nav bar uses <strong>position: fixed</strong>, which removes it from the normal flow and pins it relative to the viewport. By setting <code>top: 135px</code> and <code>left: 5%</code>, it ends up exactly 135 pixels down from the top edge (25px header margin + 100px header height + 10px header padding = 135px) and 5% in from the left edge. Because it is fixed, scrolling does not move it. I selected <code>background-color: #9400D3</code> (DarkViolet) so it stands out clearly against the LightSeaGreen header.
     </p>
   </nav>
 
+  <!--─────────────────────────────────────────────────────────────────────────
+    ARTICLES CONTAINER
+    ─────────────────────────────────────────────────────────────────────────-->
   <div>
-    <!-- ─────────────────────────────────────────────────────────────────────────
-         ARTICLES CONTAINER
-         ───────────────────────────────────────────────────────────────────────── -->
     <div class="articles">
       <p>
-        The <code>.articles</code> container uses <strong>position: relative</strong>. That means it stays in the normal flow but also serves as a containing block for any children that use <code>position: absolute</code>. Here, its own <code>left: 30px</code> moves it 30 pixels to the right from where it would normally sit (static position), and <code>top: 45px</code> moves it 45 pixels down. Because it is relative, those offsets shift this container without altering document flow, so other siblings (aside, footer) treat it as though it still occupies its original place.
+        The <code>.articles</code> container uses <strong>position: relative</strong>. That means it remains in the normal flow but becomes the reference for any absolutely positioned children (there are none here). Instead of using <code>top</code>/<code>left</code> inside .articles, I used <code>margin: 20px 0 0 5%</code> to push this entire block 20px down from the nav + 5% from the left edge. Because it’s relative, if we later choose to absolutely position something inside this container, the offsets would be computed from this container’s top-left corner.
       </p>
 
-      <!-- ───────────────────────────────────────────────────────────────────────
-           FIRST ARTICLE BOX
-           ─────────────────────────────────────────────────────────────────────── -->
+      <!--─────────────────────────────────────────────────────────────────────
+        FIRST ARTICLE BOX
+        ──────────────────────────────────────────────────────────────────────-->
       <article>
         <p>
-          This first <code>&lt;article&gt;</code> is also <strong>position: relative</strong>. That keeps it in normal flow inside its parent <code>.articles</code>. By setting <code>top: 15px</code>, the browser moves this box exactly 15 pixels down from where it would have appeared in the container. Because it is relative, the next <code>&lt;article&gt;</code> sits below, and no content overlaps. I chose <code>background-color: #BA55D3</code> (MediumOrchid) with a <code>border: 5px solid #808080</code> (Gray) to make it easy to identify in the layout.
+          This first <code>&lt;article&gt;</code> uses <strong>position: relative</strong>. That keeps it in the normal flow, but allows us to nudge it with <code>top: 15px</code>. In other words, the browser first lays it out where it would normally sit inside .articles, then “slides it” 15px down from that spot. Because it remains in flow, the second article just below also moves down accordingly. I chose <code>background-color: #BA55D3</code> (MediumOrchid) with a <code>border: 5px solid #808080</code> (Gray) so it’s easy to spot in the left column.
         </p>
       </article>
 
-      <!-- ───────────────────────────────────────────────────────────────────────
-           SECOND ARTICLE BOX
-           ─────────────────────────────────────────────────────────────────────── -->
+      <!--─────────────────────────────────────────────────────────────────────
+        SECOND ARTICLE BOX
+        ──────────────────────────────────────────────────────────────────────-->
       <article>
         <p>
-          This second <code>&lt;article&gt;</code> also uses <strong>position: relative</strong>. Its <code>top: 15px</code> shifts it 15 pixels down from its own default location inside the container—just like the first article—so both articles appear staggered by the same vertical amount. Matching colours (MediumOrchid and Gray border) ensure a cohesive, professional appearance.
+          This second <code>&lt;article&gt;</code> also uses <strong>position: relative</strong>. Its <code>top: 15px</code> shifts it 15px down from where it would normally appear inside its parent .articles. By matching the same vertical offset as the first article, both boxes appear aligned but each is pushed downward the same amount. The repeated MediumOrchid and Gray border keep a cohesive look.
         </p>
       </article>
     </div>
 
-    <!-- ─────────────────────────────────────────────────────────────────────────
-         ASIDE (RIGHT SIDEBAR)
-         ───────────────────────────────────────────────────────────────────────── -->
+    <!--─────────────────────────────────────────────────────────────────────────
+      ASIDE (RIGHT SIDEBAR)
+      ─────────────────────────────────────────────────────────────────────────-->
     <aside>
       <p>
-        The <code>&lt;aside&gt;</code> uses <strong>position: absolute</strong>, which removes it from the normal flow and positions it relative to the nearest ancestor that has a position other than static. In this code, no parent has an explicit position, so its containing block is the <code>&lt;body&gt;</code>. With <code>left: 50%</code>, its left edge sits halfway across the body’s width; and with <code>top: 235px</code>, it is 235 pixels down from the top of the body. Setting <code>width: 40%</code> means that by combining <code>left:50%</code> and <code>width:40%</code>, this sidebar consistently occupies the right column for a Holy Grail layout. I used <code>background-color: #BDB76B</code> (DarkKhaki) to contrast against the article’s MediumOrchid.
+        The <code>&lt;aside&gt;</code> uses <strong>position: absolute</strong>, which removes it from the normal document flow and places it relative to the nearest positioned ancestor. Because no parent <div> has a position property, it falls back to the <code>&lt;body&gt;</code> as its containing block. Setting <code>top: 135px</code> makes it 135px from the top of the page (the same vertical offset as the nav), and <code>right: 5%</code> places its right edge 5% in from the viewport’s right edge. Because its width is 40%, this combination ensures it occupies the correct right‐hand column for our Holy Grail layout. I used <code>background-color: #BDB76B</code> (DarkKhaki) so it contrasts nicely with the left articles.
       </p>
     </aside>
   </div>
 
-  <!-- ─────────────────────────────────────────────────────────────────────────
-       FOOTER SECTION
-       ───────────────────────────────────────────────────────────────────────── -->
+  <!--─────────────────────────────────────────────────────────────────────────
+    FOOTER SECTION
+    ─────────────────────────────────────────────────────────────────────────-->
   <footer>
     <p>
-      The <code>&lt;footer&gt;</code> is pinned with <strong>position: fixed</strong> and <code>bottom: 0px</code>. This makes it always flush to the bottom edge of the viewport, regardless of scrolling or content height. Its <code>width: 100%</code> ensures it spans the entire browser width, and at <code>height: 50px</code> plus padding, it perfectly fits in that bottom area. I picked <code>background-color: #191970</code> (MidnightBlue) so it stands out as the final, distinct section.
+      The <code>&lt;footer&gt;</code> is pinned with <strong>position: fixed</strong> and <code>bottom: 0</code>, which means it always stays flush to the bottom edge of the viewport regardless of scrolling. Its <code>width: 100%</code> spans the entire browser width; height: 50px plus padding fits neatly at the bottom. I chose <code>background-color: #191970</code> (MidnightBlue) so it stands out as a distinct final section.
     </p>
   </footer>
 
 </body>
 </html>
+
